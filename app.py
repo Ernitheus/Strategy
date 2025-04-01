@@ -39,60 +39,63 @@ if submitted:
     with st.spinner("Generating your strategy..."):
 
         prompt = f'''
-        You are a senior nonprofit marketing strategist with deep expertise in channels like Google Ad Grants, digital fundraising, and donor journey optimization. You’re analyzing a nonprofit's setup based on discovery inputs from a strategist or sales rep. 
+        You are a nonprofit marketing strategist, channel optimization expert, and fractional CMO for mission-driven organizations.
 
-        You must:
-        - Be confident and bold in your advice
-        - Challenge poor practices (e.g., PayPal-only donation pages)
-        - Provide better platform/tool recommendations
-        - Think like a CMO who has helped 100+ nonprofits grow
+        You have deep experience with:
+        - Google Ad Grant (structure, limitations, optimization, scaling to full $10K)
+        - Donation conversion strategies (UX, platforms, recurring giving, storytelling)
+        - Email, Meta Ads, SEO, Direct Mail, and multi-channel donor journeys
 
-        Include the following:
+        Based on the information below, write a strategic analysis that includes:
 
         🔍 Strategic Summary
-        - Call out the core growth opportunity or risk
-        - Frame it in tension: “They are doing X but missing Y. If they do Z...”
-        - Prioritize the ONE lever with highest upside
+        - What is the single biggest missed opportunity?
+        - Frame the challenge: “They are doing X, but they’re missing Y. If they do Z...”
 
-        💡 Key Insights
-        - What are they underutilizing?
-        - Where are they inefficient or outdated?
-        - Be blunt about problems (like poor UX, generic campaigns, PayPal redirects, weak messaging, poor Ad Grant usage)
+        📊 Channel Scorecard
+        - For each marketing channel (Email, Ad Grant, Meta, etc.):
+            - Is it used well, underused, or not used?
+            - Give specific guidance to improve ROI or test appropriately
 
-        🚀 90-Day Marketing Plan
-        - What 3–5 things should they implement now?
-        - Focus on speed, lift, and ROI
+        🚀 90-Day Strategic Action Plan
+        - List 4–6 high-impact initiatives with tactical recommendations
+        - Include platform-level fixes (e.g., build X more Ad Grant campaigns, test Meta retargeting)
 
-        🌱 6–12 Month Growth Roadmap
-        - Milestone-based path from cleanup to scaling
-        - Show how to compound impact across channels
+        📈 6–12 Month Vision
+        - Map a full-funnel nonprofit growth journey from awareness to recurring giving
+        - Include digital infrastructure suggestions (donor journey, CRM, automations)
 
-        📊 Google Ad Grant Deep Dive (if applicable)
-        - Are they underutilizing their $10K/mo? How?
-        - Suggest landing pages, high-intent keywords, content buckets, funnel improvements
-        - Mention 5% CTR requirement, ad structure, and conversion goals
+        🧪 Donation Platform Feedback
+        - Analyze the platform mentioned
+        - If PayPal or GoFundMe, call out friction and lost trust/data
+        - Recommend Classy, Givebutter, RaiseDonors — but justify why
+        - Show how platform choice affects recurring giving, branding, and long-term value
 
-        🧪 Donation Page Critique
-        - If using PayPal, GoFundMe, or other weak UX: flag it and recommend Classy, Givebutter, RaiseDonors, etc.
-        - Suggest frictionless forms, storytelling, recurring options, branding
+        💡 Google Ad Grant Breakdown
+        - If spending <$10K/mo, give detailed steps to increase spend:
+          - Expand keywords, create new campaigns/ad groups
+          - Build dedicated landing pages, improve CTR, add value-focused calls-to-action
+          - Comply with structure (2 ads/ad group, 2 ad groups/campaign) and use extensions
 
-        ❓ Follow-Up Discovery Questions
-        - What else would you ask to unlock deeper strategy?
+        🧠 Big-Picture Insight
+        - What is this org doing that’s holding them back strategically?
+        - If you were CMO, what would you change first?
+
+        ❓ Follow-Up Questions
+        - Ask 4–6 smart questions to deepen your strategic direction
 
         ---
-        Input:
-
         Org Name: {org_name}
         Mission: {mission}
         Revenue: {revenue}
         Donation Mix: {donation_mix}
         Marketing Budget: {marketing_budget}
         Channels: {', '.join(channels_used)}
-        Google Ad Grant Spend: {ad_grant_spend}
+        Ad Grant Spend: {ad_grant_spend}
         Email List: {email_list_size}
         CRM: {crm}
         Team Size: {team_size}
-        Tech Stack: {marketing_tools}
+        Tools: {marketing_tools}
         Audience Segments: {audience_segments}
         Goals: {goals}
         Challenges: {challenges}
