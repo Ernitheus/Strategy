@@ -5,6 +5,10 @@ from openai import OpenAI
 client = OpenAI(api_key=st.secrets["openai_api_key"])
 
 st.set_page_config(page_title="Nonprofit Marketing Strategy Builder", layout="centered")
+
+if "strategy_output" not in st.session_state:
+    st.session_state.strategy_output = ""
+
 st.title("🧠 Nonprofit Marketing Strategy Builder")
 st.markdown("Answer the questions below to generate a personalized, strategic nonprofit marketing plan.")
 
@@ -15,20 +19,24 @@ st.sidebar.markdown("Adjust the sliders to forecast how improving key metrics ca
 open_rate = st.sidebar.slider("Email Open Rate (%)", 10, 60, 20)
 ctr = st.sidebar.slider("Email Click-Through Rate (%)", 0, 25, 3)
 conversion_rate = st.sidebar.slider("Donation Page Conversion (%)", 1, 25, 8)
+traffic_conversion = st.sidebar.slider("Website Traffic-to-Donation Conversion (%)", 1, 25, 4)
 avg_donation = st.sidebar.slider("Average Donation Size ($)", 10, 200, 35)
 recurring_rate = st.sidebar.slider("Recurring Donor Conversion (%)", 1, 50, 10)
 monthly_email_volume = st.sidebar.number_input("Emails Sent per Month", min_value=1000, value=20000)
+website_visitors = st.sidebar.number_input("Website Visitors per Month", min_value=1000, value=10000)
 
 # ROI Estimate
-clicks = monthly_email_volume * (open_rate / 100) * (ctr / 100)
-donations = clicks * (conversion_rate / 100)
-monthly_revenue = donations * avg_donation
-recurring_revenue = donations * (recurring_rate / 100) * avg_donation
+email_clicks = monthly_email_volume * (open_rate / 100) * (ctr / 100)
+email_donations = email_clicks * (conversion_rate / 100)
+traffic_donations = website_visitors * (traffic_conversion / 100)
+total_donations = email_donations + traffic_donations
+monthly_revenue = total_donations * avg_donation
+recurring_revenue = total_donations * (recurring_rate / 100) * avg_donation
 
 total_monthly = monthly_revenue + recurring_revenue
 
 st.sidebar.markdown(f"**Estimated Monthly Revenue: ${total_monthly:,.0f}**")
-st.sidebar.markdown("This is based on the improvements you’ve modeled. Adjust sliders to simulate potential ROI.")
+st.sidebar.markdown("This estimate combines email and website strategies. Adjust sliders to simulate results.")
 
 # Use a form to group inputs
 with st.form("strategy_form"):
@@ -136,7 +144,10 @@ if submitted:
             ]
         )
 
-        strategy = response.choices[0].message.content
-        st.subheader("🎯 Your Custom Strategy")
-        st.markdown(strategy)
-        st.download_button("Download Strategy", strategy, file_name="nonprofit_strategy.txt")
+        st.session_state.strategy_output = response.choices[0].message.content
+
+# Display strategy output if available
+if st.session_state.strategy_output:
+    st.subheader("🎯 Your Custom Strategy")
+    st.markdown(st.session_state.strategy_output)
+    st.download_button("Download Strategy", st.session_state.strategy_output, file_name="nonprofit_strategy.txt")
