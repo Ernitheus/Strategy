@@ -17,8 +17,9 @@ with st.form("strategy_form"):
     marketing_budget = st.selectbox("Annual Marketing Budget", ["< $10k", "$10k - $50k", "$50k - $100k", ">$100k"])
     channels_used = st.multiselect(
         "Active Marketing Channels",
-        ["Google Ads", "Meta Ads", "Email", "SEO", "Events", "Organic Social", "Direct Mail"]
+        ["Google Ad Grant", "Google Paid Ads", "Meta Ads", "Email", "SEO", "Events", "Organic Social", "Direct Mail"]
     )
+    ad_grant_spend = st.text_input("How much of your $10K Google Ad Grant do you currently spend per month (if applicable)?")
     email_list_size = st.text_input("Email List Size & Avg Open Rate (if known)")
     crm = st.text_input("CRM / Email Tool Used")
     team_size = st.slider("Marketing Team Size", 1, 20, 3)
@@ -29,7 +30,7 @@ with st.form("strategy_form"):
     past_fails = st.text_area("What's one marketing effort that didn’t work recently — and why?")
     donor_journey = st.selectbox("Do you have a mapped donor journey?", ["Yes", "Somewhat", "No"])
     paid_ads_results = st.text_area("Have you run paid ads before? Share results if known.")
-    donation_platform = st.text_input("What donation platform or form are you using?")
+    donation_platform = st.text_input("What donation platform or form are you using (e.g., PayPal, Classy, Givebutter, etc.)?")
     homepage_copy = st.text_area("Paste homepage and/or donation page copy (optional)", height=250)
 
     submitted = st.form_submit_button("Generate Strategy")
@@ -38,34 +39,45 @@ if submitted:
     with st.spinner("Generating your strategy..."):
 
         prompt = f'''
-        You are a senior nonprofit marketing strategist and growth advisor. Your job is to analyze the inputs below and deliver a sharp, confident strategy.
+        You are a senior nonprofit marketing strategist with deep expertise in channels like Google Ad Grants, digital fundraising, and donor journey optimization. You’re analyzing a nonprofit's setup based on discovery inputs from a strategist or sales rep. 
 
-        Your output must include:
+        You must:
+        - Be confident and bold in your advice
+        - Challenge poor practices (e.g., PayPal-only donation pages)
+        - Provide better platform/tool recommendations
+        - Think like a CMO who has helped 100+ nonprofits grow
+
+        Include the following:
 
         🔍 Strategic Summary
-        - Bold TL;DR of the org's biggest risk or opportunity
-        - State the tension: “They are doing X, but they could achieve Y if they fix/change Z.”
-        - Prioritize their #1 growth lever
+        - Call out the core growth opportunity or risk
+        - Frame it in tension: “They are doing X but missing Y. If they do Z...”
+        - Prioritize the ONE lever with highest upside
 
         💡 Key Insights
-        - Point out underleveraged assets (email list, tools, audiences)
-        - Flag any poor practices or platform choices (e.g., PayPal links, missing journey, weak stack)
-        - Recommend better tools or fixes with real names (e.g., "Move from PayPal to Classy or Givebutter")
+        - What are they underutilizing?
+        - Where are they inefficient or outdated?
+        - Be blunt about problems (like poor UX, generic campaigns, PayPal redirects, weak messaging, poor Ad Grant usage)
 
-        🚀 90-Day Action Plan
-        - Focus on 3–5 specific high-impact marketing actions
-        - Write like you're advising their Director of Marketing
+        🚀 90-Day Marketing Plan
+        - What 3–5 things should they implement now?
+        - Focus on speed, lift, and ROI
 
         🌱 6–12 Month Growth Roadmap
-        - Break into phases or quarters if helpful
-        - Build maturity over time — from basic cleanup to high-performance loops
+        - Milestone-based path from cleanup to scaling
+        - Show how to compound impact across channels
 
-        🧪 Homepage / Donation Page Feedback (if provided)
-        - Review clarity, donation experience, storytelling, conversion friction
-        - Be brutally honest — recommend layout, tools, and storytelling changes
+        📊 Google Ad Grant Deep Dive (if applicable)
+        - Are they underutilizing their $10K/mo? How?
+        - Suggest landing pages, high-intent keywords, content buckets, funnel improvements
+        - Mention 5% CTR requirement, ad structure, and conversion goals
 
-        ❓ Follow-Up Questions
-        - Ask 3–5 clarifying questions that would deepen strategy or uncover blockers
+        🧪 Donation Page Critique
+        - If using PayPal, GoFundMe, or other weak UX: flag it and recommend Classy, Givebutter, RaiseDonors, etc.
+        - Suggest frictionless forms, storytelling, recurring options, branding
+
+        ❓ Follow-Up Discovery Questions
+        - What else would you ask to unlock deeper strategy?
 
         ---
         Input:
@@ -76,6 +88,7 @@ if submitted:
         Donation Mix: {donation_mix}
         Marketing Budget: {marketing_budget}
         Channels: {', '.join(channels_used)}
+        Google Ad Grant Spend: {ad_grant_spend}
         Email List: {email_list_size}
         CRM: {crm}
         Team Size: {team_size}
