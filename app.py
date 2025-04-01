@@ -8,6 +8,28 @@ st.set_page_config(page_title="Nonprofit Marketing Strategy Builder", layout="ce
 st.title("🧠 Nonprofit Marketing Strategy Builder")
 st.markdown("Answer the questions below to generate a personalized, strategic nonprofit marketing plan.")
 
+# ROI Sidebar Calculator
+st.sidebar.header("💸 ROI Simulator")
+st.sidebar.markdown("Adjust the sliders to forecast how improving key metrics can impact your donation revenue.")
+
+open_rate = st.sidebar.slider("Email Open Rate (%)", 10, 60, 20)
+ctr = st.sidebar.slider("Email Click-Through Rate (%)", 0, 25, 3)
+conversion_rate = st.sidebar.slider("Donation Page Conversion (%)", 1, 25, 8)
+avg_donation = st.sidebar.slider("Average Donation Size ($)", 10, 200, 35)
+recurring_rate = st.sidebar.slider("Recurring Donor Conversion (%)", 1, 50, 10)
+monthly_email_volume = st.sidebar.number_input("Emails Sent per Month", min_value=1000, value=20000)
+
+# ROI Estimate
+clicks = monthly_email_volume * (open_rate / 100) * (ctr / 100)
+donations = clicks * (conversion_rate / 100)
+monthly_revenue = donations * avg_donation
+recurring_revenue = donations * (recurring_rate / 100) * avg_donation
+
+total_monthly = monthly_revenue + recurring_revenue
+
+st.sidebar.markdown(f"**Estimated Monthly Revenue: ${total_monthly:,.0f}**")
+st.sidebar.markdown("This is based on the improvements you’ve modeled. Adjust sliders to simulate potential ROI.")
+
 # Use a form to group inputs
 with st.form("strategy_form"):
     org_name = st.text_input("Organization Name")
