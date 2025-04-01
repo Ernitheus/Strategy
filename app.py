@@ -1,8 +1,8 @@
 import streamlit as st
-import openai
+from openai import OpenAI
 
-# Set up OpenAI key (for local dev; don't hardcode in production)
-openai.api_key = st.secrets["openai_api_key"]
+# Set up OpenAI client using your secret key
+client = OpenAI(api_key=st.secrets["openai_api_key"])
 
 st.set_page_config(page_title="Nonprofit Marketing Strategy Builder", layout="centered")
 st.title("🧠 Nonprofit Marketing Strategy Builder")
@@ -57,7 +57,7 @@ if submitted:
         Internal Tools: {internal_tools}
         """
 
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-4",
             messages=[
                 {"role": "system", "content": "You are a nonprofit marketing strategist."},
