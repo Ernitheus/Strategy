@@ -35,39 +35,59 @@ with st.form("strategy_form"):
 if submitted:
     with st.spinner("Generating your strategy..."):
 
-        # Improved prompt
-        prompt = f"""
-        You are a senior nonprofit marketing strategist.
+        prompt = f'''
+        You are a senior nonprofit marketing strategist and growth advisor. 
 
-        The goal is to analyze the following client’s data and return a powerful, actionable strategy. Your answer should include:
+        You’ve been hired to analyze a nonprofit’s marketing performance and craft a personalized growth strategy based on the following inputs from their sales team.
 
-        1. 🔍 Strategic Summary (2–3 sentence TL;DR that calls out the big insight)
-        2. 💡 Key Insights (pain points, gaps, and untapped opportunities)
-        3. 🚀 90-Day Action Plan (specific things they should start doing now)
-        4. 🌱 Long-Term Roadmap (6–12 month growth strategy with milestones)
-        5. ❓ Follow-Up Questions (ask 3–5 clarifying questions to deepen understanding)
+        Your response must include:
 
-        Make the strategy bold, specific, and visionary. Avoid generic advice. Speak like a senior consultant who’s done this 100x. Use confident language, cite frameworks or patterns when helpful, and aim for “aha” moments that would impress a savvy CMO.
+        🔍 Strategic Summary
+        - Bold TL;DR: What’s the one major opportunity or risk this org must address?
+        - State the tension clearly: “X is happening... but they could achieve Y if they do Z.”
+        - Prioritize the #1 most important action.
 
-        Here is the input from the sales rep:
+        💡 Key Insights
+        - Highlight gaps or underleveraged assets (e.g. large email list, unused donor journey, inefficient ads).
+        - Be confident and blunt — don’t restate obvious things.
+        - Call out risks and opportunity costs (“If they don’t fix this, they’ll keep losing X.”)
+
+        🚀 90-Day Marketing Plan
+        - Focus on speed and ROI.
+        - Prioritize 3–5 specific initiatives. Include tactics, channels, and goals.
+        - Write like you’re briefing their head of marketing.
+
+        🌱 6–12 Month Growth Roadmap
+        - Paint the vision: Where are they headed? What maturity stages will they reach?
+        - Include milestones and pivots. Call out dependencies or constraints.
+
+        🧪 Homepage / Donation Page Feedback (if provided)
+        - Review their pasted homepage + donation copy. Analyze clarity, emotional resonance, and conversion flow.
+        - Suggest 2–3 CRO or storytelling upgrades.
+
+        ❓ Follow-Up Questions for Client Discovery
+        - Ask 4–5 sharp questions to clarify what’s missing, vague, or misaligned.
+        - Your goal is to deepen strategic understanding.
+
+        Input Data:
 
         Organization Name: {org_name}
-        Annual Revenue: {revenue}
-        Marketing Budget: {marketing_budget}
-        Marketing Channels Used: {', '.join(channels_used)}
+        Revenue: {revenue}
+        Budget: {marketing_budget}
+        Channels: {', '.join(channels_used)}
         Email List Size: {email_list_size}
-        CRM Used: {crm}
-        Marketing Team Size: {team_size}
-        Main Goals: {main_goals}
-        Biggest Challenges: {current_challenges}
-        Donor Journey Mapped?: {donor_journey}
+        CRM: {crm}
+        Team Size: {team_size}
+        Goals: {main_goals}
+        Challenges: {current_challenges}
+        Donor Journey: {donor_journey}
         Audience Segments: {audience_segments}
-        Worked with Agencies?: {past_agency}
-        Ad Performance History: {ads_performance}
-        Best Campaign Ever: {campaign_highlight}
-        Internal Tools Used: {internal_tools}
-        Homepage and Donation Page Copy: {homepage_copy}
-        """
+        Worked with Agency: {past_agency}
+        Ad Performance: {ads_performance}
+        Best Campaign: {campaign_highlight}
+        Internal Tools: {internal_tools}
+        Homepage + Donation Copy: {homepage_copy}
+        '''
 
         response = client.chat.completions.create(
             model="gpt-4",
