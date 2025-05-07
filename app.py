@@ -165,4 +165,3 @@ if st.session_state.strategy_output:
     st.subheader("🎯 Your Custom Strategy")
     st.markdown(st.session_state.strategy_output)
     st.download_button("Download Strategy", st.session_state.strategy_output, file_name="nonprofit_strategy.txt")
-
