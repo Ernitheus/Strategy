@@ -32,26 +32,10 @@ traffic_donations = website_visitors * (traffic_conversion / 100)
 total_donations = email_donations + traffic_donations
 monthly_revenue = total_donations * avg_donation
 recurring_revenue = total_donations * (recurring_rate / 100) * avg_donation
-
 total_monthly = monthly_revenue + recurring_revenue
 
 st.sidebar.markdown(f"**Estimated Monthly Revenue: ${total_monthly:,.0f}**")
 st.sidebar.markdown("This estimate combines email and website strategies. Adjust sliders to simulate results.")
-
-# Simulated enrichment function (can be replaced with real API later)
-def enrich_org_data(website):
-    if not website:
-        return {}
-    return {
-        "estimated_annual_revenue": "$1.2M",
-        "primary_focus_area": "Youth Development",
-        "irs_status": "501(c)(3)",
-        "recent_fundraising_campaigns": [
-            "Back-to-School Backpack Drive",
-            "Holiday Giving Match Campaign"
-        ],
-        "website_summary": "The homepage features emotional storytelling, calls-to-action to donate and volunteer, and highlights recent impact."
-    }
 
 # Form input
 with st.form("strategy_form"):
@@ -81,32 +65,31 @@ with st.form("strategy_form"):
 
     submitted = st.form_submit_button("Generate Strategy")
 
-# Process and call OpenAI
+# Call GPT-4 with detailed prompt
 if submitted:
     with st.spinner("Generating your strategy..."):
 
-        enriched_data = enrich_org_data(website_url)
-
-        enriched_snippet = f'''
-🌐 Enriched Organizational Context:
-- Website: {website_url}
-- Estimated Annual Revenue: {enriched_data.get("estimated_annual_revenue", "Unknown")}
-- IRS Status: {enriched_data.get("irs_status", "Unknown")}
-- Primary Focus: {enriched_data.get("primary_focus_area", "Unknown")}
-- Notable Campaigns: {', '.join(enriched_data.get("recent_fundraising_campaigns", []))}
-- Website Overview: {enriched_data.get("website_summary", "N/A")}
-- Homepage Copy Provided: {homepage_copy[:1000] if homepage_copy else "None"}
-'''
-
         prompt = f'''
-You are a nonprofit marketing strategist, channel optimization expert, and fractional CMO for mission-driven organizations.
+You are a nonprofit marketing strategist, channel optimization expert, and growth advisor.
 
-You have deep experience with:
-- Google Ad Grant (structure, limitations, optimization, scaling to full $10K)
-- Donation conversion strategies (UX, platforms, recurring giving, storytelling)
-- Email, Meta Ads, SEO, Direct Mail, and multi-channel donor journeys
+First, research this organization using ONLY the following fields:
+- Organization Name: {org_name}
+- Website: {website_url}
+- Homepage Copy: {homepage_copy}
 
-Based on the information below, write a strategic analysis that includes:
+Simulate a web search and IRS lookup using this info. Use your training data and inference to make realistic assumptions.
+
+---
+🔎 Organizational Research Summary
+- Who is this organization?
+- What do they do?
+- What is their likely size and audience?
+- How are they likely raising money now?
+- Any major programs or fundraising campaigns you can infer?
+
+---
+
+Then, based on their answers and your simulated research, provide a strategic marketing analysis:
 
 🔍 Strategic Summary
 - What is the single biggest missed opportunity?
@@ -128,7 +111,7 @@ Based on the information below, write a strategic analysis that includes:
 🧪 Donation Platform Feedback
 - Analyze the platform mentioned
 - If PayPal or GoFundMe, call out friction and lost trust/data
-- Recommend Classy, Givebutter, RaiseDonors — but justify why
+- Recommend Classy, Givebutter, RaiseDonors — and justify why
 - Show how platform choice affects recurring giving, branding, and long-term value
 
 💡 Google Ad Grant Breakdown
@@ -163,8 +146,8 @@ Failed Effort: {past_fails}
 Donor Journey Mapped: {donor_journey}
 Paid Ads Results: {paid_ads_results}
 Donation Platform: {donation_platform}
-
-{enriched_snippet}
+Homepage Copy: {homepage_copy[:1000] if homepage_copy else "Not provided"}
+Website: {website_url}
 '''
 
         response = client.chat.completions.create(
@@ -177,8 +160,9 @@ Donation Platform: {donation_platform}
 
         st.session_state.strategy_output = response.choices[0].message.content
 
-# Display result
+# Display the result
 if st.session_state.strategy_output:
     st.subheader("🎯 Your Custom Strategy")
     st.markdown(st.session_state.strategy_output)
     st.download_button("Download Strategy", st.session_state.strategy_output, file_name="nonprofit_strategy.txt")
+
